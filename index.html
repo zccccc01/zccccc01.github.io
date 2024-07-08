@@ -1,29 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <style>
+	#img2 {transform:rotate(90deg);}
         .container {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            height: 100vh;
+            height: 65vh;
         }
-
+	body {
+            background-image: url('1.jpg');
+ 	    background-repeat: no-repeat;
+ 	    background-attachment: fixed;  
+  	    background-size: cover;
+	}
+	h1 {
+            margin: 0;
+            padding: 20px 0;
+            color: purple;
+	}
         .buttons {
             display: flex;
             justify-content: center;
             gap: 10px;
         }
-
         .matrix-container {
             margin-top: 20px;
         }
-
+	img {
+            display: block;
+            margin: 0 auto;
+	}
         table {
             border-collapse: collapse;
         }
-
         td {
             width: 40px;
             height: 40px;
@@ -33,7 +46,11 @@
     </style>
 </head>
 <body>
-    <div class="container">
+        <div class="container">
+        <h1>矩阵置零</h1>
+    	<img id="img2" style="width:8vw"  src="2.jpg" alt="This is a img">
+	<br>
+	<br>
         <div class="buttons">
             <button onclick="setMatrix()">创建矩阵</button>
             <button onclick="resetMatrix()">矩阵置零</button>
