@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2024年终总结 | ZCCCCC01's Blog</title><meta name="author" content="ZCCCCC01"><meta name="copyright" content="ZCCCCC01"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="现在是 24 年最后一天，评价一下自己这一年吧。今晚是跨年夜，我独自享受着图书馆安静的氛围，码下这篇文章。 先谈学习上吧。年初到大二下学期了，我在对计算机专业的就业及学习路线之类的都是迷茫的，但是我遇到了个好老师(孙孔峰老师)，他教授数据库概论这门课，从他课上我学会了去写 sql 语句(对于当时迷茫，浑浑噩噩混日子，code 水平差的一批的我来说算是增加了点信心)，在课上他还跟我们分享就业方向。在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2024年终总结">
+<meta property="og:url" content="https://zccccc01.github.io/2024/12/31/2024%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="ZCCCCC01&#39;s Blog">
+<meta property="og:description" content="现在是 24 年最后一天，评价一下自己这一年吧。今晚是跨年夜，我独自享受着图书馆安静的氛围，码下这篇文章。 先谈学习上吧。年初到大二下学期了，我在对计算机专业的就业及学习路线之类的都是迷茫的，但是我遇到了个好老师(孙孔峰老师)，他教授数据库概论这门课，从他课上我学会了去写 sql 语句(对于当时迷茫，浑浑噩噩混日子，code 水平差的一批的我来说算是增加了点信心)，在课上他还跟我们分享就业方向。在">
+<meta property="og:locale">
+<meta property="og:image" content="https://zccccc01.github.io/img/avatar.png">
+<meta property="article:published_time" content="2024-12-31T12:07:37.000Z">
+<meta property="article:modified_time" content="2024-12-31T13:17:20.097Z">
+<meta property="article:author" content="ZCCCCC01">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zccccc01.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://zccccc01.github.io/2024/12/31/2024%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2024年终总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #49B202;"></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">ZCCCCC01's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">2024年终总结</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">2024年终总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-12-31T12:07:37.000Z" title="Created 2024-12-31 20:07:37">2024-12-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-12-31T13:17:20.097Z" title="Updated 2024-12-31 21:17:20">2024-12-31</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>现在是 24 年最后一天，评价一下自己这一年吧。今晚是跨年夜，我独自享受着图书馆安静的氛围，码下这篇文章。</p>
+<p>先谈学习上吧。年初到大二下学期了，我在对计算机专业的就业及学习路线之类的都是迷茫的，但是我遇到了个好老师(孙孔峰老师)，他教授数据库概论这门课，从他课上我学会了去写 sql 语句(对于当时迷茫，浑浑噩噩混日子，code 水平差的一批的我来说算是增加了点信心)，在课上他还跟我们分享就业方向。在课后，自己便去认真了解计算机就业相关的信息。也是重新拾起了半吊水平的 c++，学着去刷力扣，去看黑马的课，自己尝试着手搓 avl tree，实现一些数据结构等。在暑假无意中翻到了一个网站，北大大佬搞的<a target="_blank" rel="noopener" href="https://csdiy.wiki/">cs 自学指南</a>，在里面发现了很多国外名校的公开课，我如同发现新世界，挑选了里面的 cmu15445 跟着 andy 学数据库底层的知识，也是让我受益匪浅。当初看这个课是因为自己对数据库有点了解，然后课程实验也是用 c++去写，便开始了学习，不过课程的实验还没有做完 😫(自己太菜了)。到大三上学期，有一门课数据库综合课程设计，要求要搞可视化啥的，一开始想着用 qt 搞？嗯，算了吧，还是搞网页吧。然后又因为以后想看 MIT6.824，这个课的实验是 go 去写，然后想让自己早点学习 go，就在这个课设搞了 goweb。搞完又是一发不可收拾，发现自己对 c++没有这么热爱，还写出一坨内存泄漏的代码(miniob 比赛)，了解了很多 web 开发的东西，云原生，微服务之类的词，我这才意识到这个可能是我感兴趣的方向，以后就业争取往这里看齐。又在偶然间听到 rust 的名号，别人一顿吹，关键在开源社区也挺火的，我也就跟风学了一下(未来仍打算认真深入学习)，用于 stm32 开发中，完成了智能设备接口课程的实验。再谈谈英语，自己一年两考六级，听力还是差的一批，感觉过级无望 😭😭。</p>
+<p>25 年学习展望：1. 坚持刷算法题。2. 坚持英语学习。3. 争取多看书。4. rust 学习，争取实践到项目中。5. 做好秋招准备。</p>
+<p>生活上，今年跑了两场马拉松，一场清远半马，一场广州全马。广马的戒断反应真的很大，明年还想去跑一趟。希望自己坚持跑下去，也远离伤病，早日把半马 145，全马 400 的目标实现。</p>
+<p>总结：24 年找到了自己真正想干的事，也有热爱的事，也许还有遗憾，没能在今年的半马赛事 sub145，still a single dog。25 年要面对就业压力了，更多挑战，向业内大佬学习，拿到满意的 offer。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://zccccc01.github.io">ZCCCCC01</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://zccccc01.github.io/2024/12/31/2024%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">https://zccccc01.github.io/2024/12/31/2024%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2024/12/27/Github-action-%E9%83%A8%E7%BD%B2%E5%8D%9A%E5%AE%A2/" title="Github action 部署博客"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Github action 部署博客</div></div><div class="info-2"><div class="info-item-1">Github action 部署博客(vitepress)双仓库方案:source 仓库: 存放源码和.md 文件(随着该仓库的更新,会自动触发 action 构建到.io 仓库) username.github.io 仓库: 存放构建后的静态文件 GitHub Action 配置 在 source 仓库创建 workflow 文件: 设置部署密钥: 生成 SSH 密钥对 私钥添加到 source 仓库的 Secrets 公钥添加到部署仓库的 Deploy Keys    详细指南 在 source 仓库  1ssh-keygen -t rsa -b 4096 -C &quot;your-email@example.com&quot; -f deploy_key   配置仓库密钥：  在 Source 仓库： 去 Settings -&gt; Secrets and variables -&gt; Actions -&gt; New repository secret添加名为 DEPLOY_KEY 的 secret，内容是 deploy_key（私钥里面完整内容） 在 .io...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">ZCCCCC01</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zccccc01"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">繁华如三千东流水,我只取一瓢爱了解</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/31/2024%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" title="2024年终总结">2024年终总结</a><time datetime="2024-12-31T12:07:37.000Z" title="Created 2024-12-31 20:07:37">2024-12-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/27/Github-action-%E9%83%A8%E7%BD%B2%E5%8D%9A%E5%AE%A2/" title="Github action 部署博客">Github action 部署博客</a><time datetime="2024-12-27T09:13:02.000Z" title="Created 2024-12-27 17:13:02">2024-12-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/24/gpt2024%E5%B9%B4%E7%BB%88%E6%8A%A5%E5%91%8A/" title="gpt2024年终报告">gpt2024年终报告</a><time datetime="2024-12-23T16:48:41.000Z" title="Created 2024-12-24 00:48:41">2024-12-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/23/%E4%BD%BF%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/" title="使用Hexo搭建博客">使用Hexo搭建博客</a><time datetime="2024-12-23T13:40:12.000Z" title="Created 2024-12-23 21:40:12">2024-12-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/23/hello-world/" title="Hello World">Hello World</a><time datetime="2024-12-23T13:27:31.262Z" title="Created 2024-12-23 21:27:31">2024-12-23</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By ZCCCCC01</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
