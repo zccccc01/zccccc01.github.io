@@ -1,0 +1,620 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CSAPP-bomblab总结 | ZCCCCC01's Blog</title><meta name="author" content="ZCCCCC01"><meta name="copyright" content="ZCCCCC01"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="做 bomblab 的心路历程总结工具 objdump反汇编工具 123objdump -t bomb # 显示符号表,函数名...objdump -d bomb &gt; bomb.s # 反汇编objdump -d -M intel bomb &gt; bomb.s # intel 风格(AT&amp;T)  gdb调试工具 123456789101112131415161718192021g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSAPP-bomblab总结">
+<meta property="og:url" content="https://zccccc01.github.io/2025/04/23/CSAPP-bomblab%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="ZCCCCC01&#39;s Blog">
+<meta property="og:description" content="做 bomblab 的心路历程总结工具 objdump反汇编工具 123objdump -t bomb # 显示符号表,函数名...objdump -d bomb &gt; bomb.s # 反汇编objdump -d -M intel bomb &gt; bomb.s # intel 风格(AT&amp;T)  gdb调试工具 123456789101112131415161718192021g">
+<meta property="og:locale">
+<meta property="og:image" content="https://zccccc01.github.io/img/avatar.png">
+<meta property="article:published_time" content="2025-04-23T08:29:49.000Z">
+<meta property="article:modified_time" content="2025-04-23T08:44:19.555Z">
+<meta property="article:author" content="ZCCCCC01">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zccccc01.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://zccccc01.github.io/2025/04/23/CSAPP-bomblab%E6%80%BB%E7%BB%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CSAPP-bomblab总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #49B202;"></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">ZCCCCC01's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">CSAPP-bomblab总结</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">CSAPP-bomblab总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-04-23T08:29:49.000Z" title="Created 2025-04-23 16:29:49">2025-04-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-04-23T08:44:19.555Z" title="Updated 2025-04-23 16:44:19">2025-04-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="做-bomblab-的心路历程总结"><a href="#做-bomblab-的心路历程总结" class="headerlink" title="做 bomblab 的心路历程总结"></a>做 bomblab 的心路历程总结</h1><h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><ol>
+<li><p><code>objdump</code>反汇编工具</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">objdump -t bomb <span class="comment"># 显示符号表,函数名...</span></span><br><span class="line">objdump -d bomb &gt; bomb.s <span class="comment"># 反汇编</span></span><br><span class="line">objdump -d -M intel bomb &gt; bomb.s <span class="comment"># intel 风格(AT&amp;T)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>gdb</code>调试工具</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">gdb bomb <span class="comment"># 进入调试模式</span></span><br><span class="line">b func <span class="comment"># 在函数func处设置断点</span></span><br><span class="line">b main.c:123 <span class="comment"># 在main.c:123处设置断点</span></span><br><span class="line">b *0x12345678 <span class="comment"># 在地址0x12345678处设置断点</span></span><br><span class="line">r <span class="comment"># 运行程序</span></span><br><span class="line">c <span class="comment"># 继续运行</span></span><br><span class="line">n <span class="comment"># 单步执行</span></span><br><span class="line">s <span class="comment"># 进入函数</span></span><br><span class="line">stepi &lt;n&gt; <span class="comment"># 执行一条汇编指令, n可以执行n条</span></span><br><span class="line">finish <span class="comment"># 跳出当前函数</span></span><br><span class="line">layout asm <span class="comment"># 切换到汇编视图</span></span><br><span class="line">layout src <span class="comment"># 切换到源代码视图(快捷键ctrl + x + a)</span></span><br><span class="line">p num <span class="comment"># 打印变量num的值</span></span><br><span class="line">p /&lt;<span class="built_in">fmt</span>&gt; <span class="variable">$rsp</span> <span class="comment"># 打印寄存器的值</span></span><br><span class="line">p *(int*)(0xff + <span class="variable">$rsp</span>) <span class="comment"># 拿到指针的值</span></span><br><span class="line">p 0x11 <span class="comment"># 打印0x11的十进制表示</span></span><br><span class="line">p /x 555 <span class="comment"># 打印555的十六进制表示</span></span><br><span class="line">x/&lt;n&gt;&lt;<span class="built_in">fmt</span>&gt; &lt;addr&gt; <span class="comment"># 打印内存的值(/后参数) b 1字节 w 4字节 g 8字节 d十进制 x十六进制</span></span><br><span class="line">disas string_length <span class="comment"># 查看函数的汇编</span></span><br><span class="line">info registers <span class="comment"># 查看寄存器</span></span><br><span class="line">info stack <span class="comment"># 查看调用栈和bt类似</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>strings</code>提取 ELF 可执行文件中的所有可打印字符</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strings bomb &gt; bomb.txt</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="配置-gdbinit-文件"><a href="#配置-gdbinit-文件" class="headerlink" title="配置.gdbinit 文件"></a>配置.gdbinit 文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 关闭分页</span></span><br><span class="line"><span class="built_in">set</span> pagination off</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开启颜色</span></span><br><span class="line"><span class="built_in">set</span> style enabled on</span><br><span class="line"></span><br><span class="line"><span class="comment"># 禁止确认提示（如删除断点）</span></span><br><span class="line"><span class="built_in">set</span> confirm off</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置默认文件输入</span></span><br><span class="line"><span class="comment"># set args input.txt(我用这个不行,不知道为什么)</span></span><br><span class="line"><span class="comment"># 在启动时, 输入r input.txt读取就行</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示寄存器</span></span><br><span class="line">display <span class="variable">$eax</span></span><br><span class="line">display <span class="variable">$ebx</span></span><br><span class="line">display <span class="variable">$ecx</span></span><br><span class="line">display <span class="variable">$edx</span></span><br><span class="line">display <span class="variable">$esp</span></span><br><span class="line">display <span class="variable">$ebp</span></span><br><span class="line">display <span class="variable">$eip</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置断点在 main 和所有 phase 函数</span></span><br><span class="line"><span class="built_in">break</span> 73</span><br><span class="line"><span class="comment"># break phase_1</span></span><br><span class="line"><span class="comment"># break phase_2</span></span><br><span class="line"><span class="comment"># break phase_3</span></span><br><span class="line"><span class="comment"># break phase_4</span></span><br><span class="line"><span class="comment"># break phase_5</span></span><br><span class="line"><span class="comment"># break phase_6</span></span><br><span class="line"><span class="comment"># b phase_defused</span></span><br><span class="line"><span class="comment"># b secret_phase</span></span><br><span class="line"><span class="comment"># b fun7</span></span><br><span class="line"><span class="comment"># b strings_not_equal</span></span><br><span class="line"><span class="comment"># b string_length</span></span><br><span class="line"><span class="comment"># b read_six_numbers</span></span><br><span class="line"><span class="comment"># b func4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 避免炸弹爆炸</span></span><br><span class="line"><span class="built_in">break</span> explode_bomb</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见寄存器知识总结"><a href="#常见寄存器知识总结" class="headerlink" title="常见寄存器知识总结"></a>常见寄存器知识总结</h2><p><img src="/../images/bomblab/image-5.png" alt="alt text"></p>
+<h2 id="let’s-go"><a href="#let’s-go" class="headerlink" title="let’s go"></a>let’s go</h2><h3 id="phase-1"><a href="#phase-1" class="headerlink" title="phase_1"></a>phase_1</h3><p>看 phase_1 的汇编发现调用 strings_not_equal 来比较</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">400ee9:	e8 4a 04 00 00       	call   401338 &lt;strings_not_equal&gt; # 调用函数比较字符串是否相等</span><br><span class="line">400eee:	85 c0                	test   %eax,%eax # 检查返回值是否为0</span><br><span class="line">400ef0:	74 05                	je     400ef7 &lt;phase_1+0x17&gt;</span><br><span class="line">400ef2:	e8 43 05 00 00       	call   40143a &lt;explode_bomb&gt; # 不等于0就爆炸</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/bomblab/image.png" alt="alt text"></p>
+<p>检查一下<code>$rdi</code>和<code>$rsi</code>寄存器查看存放了哪些函数调用参数</p>
+<p><img src="/../images/bomblab/image-1.png" alt="alt text"></p>
+<p>大致翻译为 c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 0x402400 =&gt; ans</span></span><br><span class="line"><span class="keyword">if</span>(strings_not_equal(input, ans)==<span class="number">0</span>) &#123;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// strings_not_equal(input, ans)当两个字符串长度不相等时返回1, 相等且每个字符匹配返回0</span></span><br></pre></td></tr></table></figure>
+
+<p>画了个图</p>
+<p><img src="/../images/bomblab/image-8.png" alt="alt text"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">40135c:	0f b6 03             	movzbl (%rbx),%eax</span><br><span class="line">40135f:	84 c0                	test   %al,%al</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//movzbl (%rbx)取一个字节b</span></span><br><span class="line"><span class="keyword">if</span>(ch==<span class="number">0</span>)&#123;</span><br><span class="line">   <span class="comment">// 终止符&#x27;\0&#x27;,结束</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>总结:</p>
+<ol>
+<li><p><code>%rdi</code>是自己输入的,<code>%rsi</code>是目标</p>
+<ul>
+<li>x86_64 的函数调用约定规定:<table>
+<thead>
+<tr>
+<th>参数位置</th>
+<th>64 位寄存器</th>
+<th>低 32 位寄存器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一个</td>
+<td><code>%rdi</code></td>
+<td><code>%edi</code></td>
+</tr>
+<tr>
+<td>第二个</td>
+<td><code>%rsi</code></td>
+<td><code>%esi</code></td>
+</tr>
+<tr>
+<td>第三个</td>
+<td><code>%rdx</code></td>
+<td><code>%edx</code></td>
+</tr>
+<tr>
+<td>第四个</td>
+<td><code>%rcx</code></td>
+<td><code>%ecx</code></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="phase-2"><a href="#phase-2" class="headerlink" title="phase_2"></a>phase_2</h3><p>在 phase_2 的汇编里面发现先调用<code>read_six_numbers</code>的函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">400f05:	e8 52 05 00 00       	call   40145c &lt;read_six_numbers&gt;</span><br></pre></td></tr></table></figure>
+
+<p>里面还调用了<code>sscanf</code>函数, 读取成功的个数小于等于 5 就爆炸</p>
+<p><img src="/../images/bomblab/image-19.png" alt="alt text"></p>
+<p>补充一下:</p>
+<ol>
+<li><p><code>scanf</code>函数读取用户输入</p>
+</li>
+<li><p><code>sscanf</code>函数将某种格式的 str 读入变量中</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x, y;</span><br><span class="line"><span class="type">const</span> <span class="type">char</span>* str = <span class="string">&quot;10 23&quot;</span>;</span><br><span class="line"><span class="comment">// x = 10 y = 23</span></span><br><span class="line"><span class="comment">// ans = 2 成功读取两个</span></span><br><span class="line"><span class="type">int</span> ans = <span class="built_in">sscanf</span>(str, <span class="string">&quot;%d %d&quot;</span>, &amp;x, &amp;y);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>返回值都是成功读取的变量个数</p>
+<p>查看<code>*$rsp</code>的值是不是 1(即读取六个数的第一个数是不是 1), 不是 1 就爆炸</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">400f0a:	83 3c 24 01          	cmpl   $0x1,(%rsp)</span><br><span class="line">400f0e:	74 20                	je     400f30 &lt;phase_2+0x34&gt;</span><br><span class="line">400f10:	e8 25 05 00 00       	call   40143a &lt;explode_bomb&gt;</span><br></pre></td></tr></table></figure>
+
+<p>把<code>&amp;($rsp+0x4)</code>放到<code>$rbx</code>里面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">400f30:	48 8d 5c 24 04       	lea    0x4(%rsp),%rbx</span><br></pre></td></tr></table></figure>
+
+<p>把<code>$rbx-0x4</code>放到<code>$eax</code>(前一个值), 然后<code>$eax</code>的值乘 2, 比较<code>$eax</code>和<code>*$rbx</code>的值(前一个值乘 2 和后一个值比较)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">400f17:	8b 43 fc             	mov    -0x4(%rbx),%eax</span><br><span class="line">400f1a:	01 c0                	add    %eax,%eax</span><br><span class="line">400f1c:	39 03                	cmp    %eax,(%rbx)</span><br><span class="line">400f1e:	74 05                	je     400f25 &lt;phase_2+0x29&gt;</span><br><span class="line">400f20:	e8 15 05 00 00       	call   40143a &lt;explode_bomb&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/bomblab/image-20.png" alt="alt text"></p>
+<p>然后就是循环, 大致翻译为 c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">6</span>;i++)&#123;</span><br><span class="line">   <span class="keyword">if</span>(i==<span class="number">0</span> &amp;&amp; input[i]!=<span class="number">1</span>)&#123;</span><br><span class="line">      explode_bomb();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span>(<span class="number">2</span>*input[i<span class="number">-1</span>]==input[i])&#123;</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">   &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      explode_bomb();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="phase-3"><a href="#phase-3" class="headerlink" title="phase_3"></a>phase_3</h3><p>根据汇编和寄存器分析出 x,y 在哪</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">400f47:	48 8d 4c 24 0c       	lea    0xc(%rsp),%rcx</span><br><span class="line">400f4c:	48 8d 54 24 08       	lea    0x8(%rsp),%rdx</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 刚好说明rsp+0xc=&gt;y(高地址)</span></span><br><span class="line"><span class="comment">//         rsp+0x8=&gt;x</span></span><br><span class="line"><span class="built_in">sscanf</span>(str, <span class="string">&quot;%d %d&quot;</span>, &amp;x, &amp;y);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">0x0000000000400f51 &lt;+14&gt;:    mov    $0x4025cf,%esi</span><br><span class="line">0x0000000000400f56 &lt;+19&gt;:    mov    $0x0,%eax</span><br><span class="line">0x0000000000400f5b &lt;+24&gt;:    call   0x400bf0 &lt;__isoc99_sscanf@plt&gt;</span><br><span class="line">0x0000000000400f60 &lt;+29&gt;:    cmp    $0x1,%eax</span><br><span class="line">0x0000000000400f63 &lt;+32&gt;:    jg     0x400f6a &lt;phase_3+39&gt;</span><br><span class="line">0x0000000000400f65 &lt;+34&gt;:    call   0x40143a &lt;explode_bomb&gt;</span><br></pre></td></tr></table></figure>
+
+<p>看出是读取两个值</p>
+<p><img src="/../images/bomblab/image-6.png" alt="alt text"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sscanf后的结果会放在%eax</span></span><br><span class="line"><span class="keyword">if</span>(<span class="built_in">sscanf</span>(input,<span class="string">&quot;%d %d&quot;</span>,&amp;x,&amp;y)&lt;=<span class="number">1</span>) &#123;</span><br><span class="line">   explode_bomb();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0x0000000000400f6a &lt;+39&gt;:    cmpl   $0x7,0x8(%rsp)</span><br><span class="line">0x0000000000400f6f &lt;+44&gt;:    ja     0x400fad &lt;phase_3+106&gt;</span><br></pre></td></tr></table></figure>
+
+<p>看汇编发现 x 的值要小于 7</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(x &gt; <span class="number">7</span>) &#123;</span><br><span class="line">   explode_bomb();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>switch 语句跳转表, <code>0..7</code> 8 个 case</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">400f75:	ff 24 c5 70 24 40 00 	jmp    *0x402470(,%rax,8) # $rax * 8 + 0x402470</span><br></pre></td></tr></table></figure>
+
+<p><code>x/8gx 0x402470</code>查看跳转地址 8 个 g(8 字节)以 16 进制查看</p>
+<p><img src="/../images/bomblab/image-3.png" alt="alt text"></p>
+<p>对应的 val</p>
+<p><img src="/../images/bomblab/image-4.png" alt="alt text"></p>
+<p>val 表</p>
+<table>
+<thead>
+<tr>
+<th>x</th>
+<th>hex(y)</th>
+<th>y</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0xcf</td>
+<td>207</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0x137</td>
+<td>311</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0x2c3</td>
+<td>707</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0x100</td>
+<td>256</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0x185</td>
+<td>389</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0xce</td>
+<td>206</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0x2aa</td>
+<td>682</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0x147</td>
+<td>327</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0x0000000000400fbe &lt;+123&gt;:   cmp    0xc(%rsp),%eax</span><br><span class="line">0x0000000000400fc2 &lt;+127&gt;:   je     0x400fc9 &lt;phase_3+134&gt;</span><br><span class="line">0x0000000000400fc4 &lt;+129&gt;:   call   0x40143a &lt;explode_bomb&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 那我让y==$eax这个值岂不是不爆炸了</span></span><br><span class="line"><span class="keyword">if</span>(y!=$eax)&#123;</span><br><span class="line">   explode_bomb();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/bomblab/image-2.png" alt="alt text"></p>
+<p>把 x&#x3D;5,看到<code>$eax</code>是 206</p>
+<p>输入就过了</p>
+<h3 id="phase-4"><a href="#phase-4" class="headerlink" title="phase_4"></a>phase_4</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">40101a:	be cf 25 40 00       	mov    $0x4025cf,%esi</span><br><span class="line">40101f:	b8 00 00 00 00       	mov    $0x0,%eax</span><br><span class="line">401024:	e8 c7 fb ff ff       	call   400bf0 &lt;__isoc99_sscanf@plt&gt;</span><br><span class="line">401029:	83 f8 02             	cmp    $0x2,%eax</span><br><span class="line">40102c:	75 07                	jne    401035 &lt;phase_4+0x29&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/bomblab/image-21.png" alt="alt text"></p>
+<p>翻译为 c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="built_in">sscanf</span>(input,<span class="string">&quot;%d %d&quot;</span>,&amp;x,&amp;y)!=<span class="number">2</span>)&#123;</span><br><span class="line">   explode_bomb();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">40102e:	83 7c 24 08 0e       	cmpl   $0xe,0x8(%rsp)</span><br><span class="line">401033:	76 05                	jbe    40103a &lt;phase_4+0x2e&gt;</span><br><span class="line">401035:	e8 00 04 00 00       	call   40143a &lt;explode_bomb&gt;</span><br></pre></td></tr></table></figure>
+
+<p>翻译为 c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(x&gt;<span class="number">14</span>)&#123;</span><br><span class="line">   explode_bomb();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">40103a:	ba 0e 00 00 00       	mov    $0xe,%edx</span><br><span class="line">40103f:	be 00 00 00 00       	mov    $0x0,%esi</span><br><span class="line">401044:	8b 7c 24 08          	mov    0x8(%rsp),%edi</span><br><span class="line">401048:	e8 81 ff ff ff       	call   400fce &lt;func4&gt;</span><br></pre></td></tr></table></figure>
+
+<p>为调用 func4 准备参数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">func4</span><span class="params">(<span class="type">int</span> x, <span class="number">0</span>, <span class="number">14</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">40104d:	85 c0                	test   %eax,%eax</span><br><span class="line">40104f:	75 07                	jne    401058 &lt;phase_4+0x4c&gt;</span><br></pre></td></tr></table></figure>
+
+<p>翻译成 c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(eax !=<span class="number">0</span>)&#123;</span><br><span class="line">   explode_bomb();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">401051:	83 7c 24 0c 00       	cmpl   $0x0,0xc(%rsp)</span><br><span class="line">401056:	74 05                	je     40105d &lt;phase_4+0x51&gt;</span><br></pre></td></tr></table></figure>
+
+<p>发现 y 必须是 0</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(y==<span class="number">0</span>)&#123;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>y 必须是 0, x&lt;14</p>
+<p>试了一下 x&#x3D;3 过了(😂🤔)</p>
+<h3 id="func4"><a href="#func4" class="headerlink" title="func4()"></a>func4()</h3><p>把汇编完整翻译过来</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第一次调用func4(x, 0, 14);</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">func4</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> low, <span class="type">int</span> high)</span> &#123;</span><br><span class="line">  <span class="comment">// 刷题时,更习惯的二分写法</span></span><br><span class="line">  <span class="comment">// low+(high-low)/2</span></span><br><span class="line">  <span class="comment">// 下面用位运算进行实现上述代码</span></span><br><span class="line">  <span class="type">int</span> diff = high - low;</span><br><span class="line">  <span class="comment">// flag保证无论low和high谁大都能计算出正确结果</span></span><br><span class="line">  <span class="type">int</span> flag = diff &gt;&gt; <span class="number">31</span>;</span><br><span class="line">  diff = (diff + flag) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">  <span class="type">int</span> mid = low + diff;</span><br><span class="line">  <span class="keyword">if</span> (mid &gt; x) &#123;</span><br><span class="line">    high = mid - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> * func4(x, low, high);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (mid &lt; x) &#123;</span><br><span class="line">    low = mid + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> * func4(x, low, high) + <span class="number">1</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>分析:</p>
+<p>总目标: 期待<code>func4</code>返回 0</p>
+<ol>
+<li><code>x&gt;mid</code>这条路不行,这里怎么都会带个+1</li>
+<li><code>x&lt;mid</code>这条路有机会,再递归下去只要不走<code>x&gt;mid</code>的路就有解</li>
+</ol>
+<p><img src="/../images/bomblab/image-7.png" alt="alt text"></p>
+<p>总结：</p>
+<table>
+<thead>
+<tr>
+<th>x</th>
+<th>有解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>3</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>1</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>0</td>
+<td>✔️</td>
+</tr>
+</tbody></table>
+<h4 id="GPT-给的一个介绍"><a href="#GPT-给的一个介绍" class="headerlink" title="GPT 给的一个介绍"></a>GPT 给的一个介绍</h4><p><code>func4(x, 0, 14)</code> 中，构造出来的是一棵“完全平衡”的 BST：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">            7</span><br><span class="line">        /       \</span><br><span class="line">      3           11</span><br><span class="line">    /   \        /   \</span><br><span class="line">  1       5    9      13</span><br><span class="line"> / \     / \   / \    / \</span><br><span class="line">0   2   4   6 8  10  12 14</span><br></pre></td></tr></table></figure>
+
+<p>路径编码示意图：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">编码值（路径）：</span><br><span class="line">        root</span><br><span class="line">       /   \</span><br><span class="line">      0     1</span><br><span class="line">     / \    / \</span><br><span class="line">    0   1   0   1</span><br><span class="line">   / \ / \  / \ / \</span><br><span class="line">  0  1 0  1 0  1 0  1</span><br></pre></td></tr></table></figure>
+
+<p>查 9,路径编码(从下往上看)为 0b01(结果是 2)</p>
+<h3 id="phase-5"><a href="#phase-5" class="headerlink" title="phase_5"></a>phase_5</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">40107a:	e8 9c 02 00 00       	call   40131b &lt;string_length&gt;</span><br><span class="line">40107f:	83 f8 06             	cmp    $0x6,%eax</span><br></pre></td></tr></table></figure>
+
+<p>找到爆炸条件</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(string_length(str)!=<span class="number">6</span>)&#123;</span><br><span class="line">   explode_bomb();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>循环读取每个输入的字符并取低 4 位做索引转化,<code>$rax</code>放着循环计数器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">40108b:	0f b6 0c 03          	movzbl (%rbx,%rax,1),%ecx</span><br><span class="line">40108f:	88 0c 24             	mov    %cl,(%rsp)</span><br><span class="line">401092:	48 8b 14 24          	mov    (%rsp),%rdx</span><br><span class="line">401096:	83 e2 0f             	and    $0xf,%edx</span><br><span class="line">401099:	0f b6 92 b0 24 40 00 	movzbl 0x4024b0(%rdx),%edx</span><br><span class="line">4010a0:	88 54 04 10          	mov    %dl,0x10(%rsp,%rax,1)</span><br><span class="line">4010a4:	48 83 c0 01          	add    $0x1,%rax</span><br><span class="line">4010a8:	48 83 f8 06          	cmp    $0x6,%rax</span><br><span class="line">4010ac:	75 dd                	jne    40108b &lt;phase_5+0x29&gt;</span><br></pre></td></tr></table></figure>
+
+<p>按索引读取输入的一个字节,<code>$rbx</code>放 input</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">40108b:	0f b6 0c 03          	movzbl (%rbx,%rax,1),%ecx</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> ch = input[idx];</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">401096:	83 e2 0f             	and    $0xf,%edx # 取低4位</span><br><span class="line">401099:	0f b6 92 b0 24 40 00 	movzbl 0x4024b0(%rdx),%edx</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/bomblab/image-22.png" alt="alt text"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> ch = str[idx]; <span class="comment">// 0x4024b0 放着一个string</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4010ae:	c6 44 24 16 00       	movb   $0x0,0x16(%rsp)</span><br></pre></td></tr></table></figure>
+
+<p>6 个字符操作完后还加一个终结符’\0’</p>
+<p><img src="/../images/bomblab/image-10.png" alt="alt text"></p>
+<p>得到此映射表</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>m</td>
+<td>a</td>
+<td>d</td>
+<td>u</td>
+<td>i</td>
+<td>e</td>
+<td>r</td>
+<td>s</td>
+<td>n</td>
+<td>f</td>
+<td>o</td>
+<td>t</td>
+<td>v</td>
+<td>b</td>
+<td>y</td>
+<td>l</td>
+</tr>
+</tbody></table>
+<p>查看转化后的结果</p>
+<p><img src="/../images/bomblab/image-12.png" alt="alt text"></p>
+<p>查看期待的 str</p>
+<p><img src="/../images/bomblab/image-11.png" alt="alt text"></p>
+<p>大致流程,input(str)&#x3D;&gt;转换成 str’(按索引做转化),然后 strings_not_equal(str’, “flyers”)</p>
+<p>就是要转换完的 str’和”flyers”相等</p>
+<p>根据映射表的转换关系和期待字符串, 所以答案就是 ascii 码里面拿一个 6 个字符的组合，要求他们低 4 位分别是 9，15，14，5，6，7</p>
+<p>输入<code>ionefg</code>即可</p>
+<h3 id="phase-6"><a href="#phase-6" class="headerlink" title="phase_6"></a>phase_6</h3><p>r13 放着第一个数字 x</p>
+<p><code>x-1 &gt; 5</code>就爆炸了,所以第一个数要&lt;&#x3D;6</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">401100:	49 89 e5             	mov    %rsp,%r13</span><br><span class="line">401103:	48 89 e6             	mov    %rsp,%rsi</span><br><span class="line">401106:	e8 51 03 00 00       	call   40145c &lt;read_six_numbers&gt;</span><br><span class="line">40110b:	49 89 e6             	mov    %rsp,%r14</span><br><span class="line">40110e:	41 bc 00 00 00 00    	mov    $0x0,%r12d</span><br><span class="line">401114:	4c 89 ed             	mov    %r13,%rbp</span><br><span class="line">401117:	41 8b 45 00          	mov    0x0(%r13),%eax</span><br><span class="line">40111b:	83 e8 01             	sub    $0x1,%eax</span><br><span class="line">40111e:	83 f8 05             	cmp    $0x5,%eax</span><br><span class="line">401121:	76 05                	jbe    401128 &lt;phase_6+0x34&gt;</span><br><span class="line">401123:	e8 12 03 00 00       	call   40143a &lt;explode_bomb&gt;</span><br></pre></td></tr></table></figure>
+
+<p>r12d 一开始是 0, 有个循环 0..6</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">401128:	41 83 c4 01          	add    $0x1,%r12d</span><br><span class="line">40112c:	41 83 fc 06          	cmp    $0x6,%r12d</span><br><span class="line">401130:	74 21                	je     401153 &lt;phase_6+0x5f&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>4*$rax+$rsp</code> 取后一个数</p>
+<p>前一个和后一个相等爆炸</p>
+<p>循环比较 6 个数,每个都必须 diff,有相等的就爆炸</p>
+<p><code>p *(int*)($rsp+$rax*4)</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">401132:	44 89 e3             	mov    %r12d,%ebx</span><br><span class="line">401135:	48 63 c3             	movslq %ebx,%rax</span><br><span class="line">401138:	8b 04 84             	mov    (%rsp,%rax,4),%eax</span><br><span class="line">40113b:	39 45 00             	cmp    %eax,0x0(%rbp)</span><br><span class="line">40113e:	75 05                	jne    401145 &lt;phase_6+0x51&gt;</span><br><span class="line">401140:	e8 f5 02 00 00       	call   40143a &lt;explode_bomb&gt;</span><br></pre></td></tr></table></figure>
+
+<p>大致翻译成 c</p>
+<p>ans 必须是 1-6 六个数字的一个组合</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">6</span>;i++)&#123;</span><br><span class="line">   <span class="keyword">if</span>(s[i]-<span class="string">&#x27;0&#x27;</span><span class="number">-1</span>&gt;<span class="number">5</span>)&#123;</span><br><span class="line">      explode_bomb();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">for</span>(<span class="type">int</span> j=i+<span class="number">1</span>;j&lt;<span class="number">6</span>;j++)&#123;</span><br><span class="line">      <span class="keyword">if</span>(s[i]==s[j])&#123;</span><br><span class="line">         explode_bomb();</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">4011da:	bd 05 00 00 00       	mov    $0x5,%ebp</span><br><span class="line">4011df:	48 8b 43 08          	mov    0x8(%rbx),%rax</span><br><span class="line">4011e3:	8b 00                	mov    (%rax),%eax</span><br><span class="line">4011e5:	39 03                	cmp    %eax,(%rbx)</span><br><span class="line">4011e7:	7d 05                	jge    4011ee &lt;phase_6+0xfa&gt;</span><br><span class="line">4011e9:	e8 4c 02 00 00       	call   40143a &lt;explode_bomb&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>x $rbx</code>拿到地址,再<code>p *0x6032f0</code>查看值</p>
+<p><img src="/../images/bomblab/image-9.png" alt="alt text"></p>
+<p>发现<code>$rbx</code>是个 node</p>
+<p><img src="/../images/bomblab/image-13.png" alt="alt text"></p>
+<p>要让<code>*$rbx &gt;= $eax</code>这关就过了</p>
+<p>尝试了几个结果得到一个表</p>
+<table>
+<thead>
+<tr>
+<th><code>*$rbx</code></th>
+<th><code>$eax</code></th>
+<th>ans</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>332</td>
+<td>477</td>
+<td>6 2 4 3 1 5 (走了一趟)</td>
+</tr>
+<tr>
+<td>443</td>
+<td>332</td>
+<td>1 6 3 4 5 2 (走了两趟)</td>
+</tr>
+<tr>
+<td>332</td>
+<td>691</td>
+<td>1 6 3 4 5 2</td>
+</tr>
+<tr>
+<td>168</td>
+<td>332</td>
+<td>5 6 4 3 1 2 (走了一趟)</td>
+</tr>
+<tr>
+<td>477</td>
+<td>332</td>
+<td>2 6 4 3 1 5 (走了两趟)</td>
+</tr>
+<tr>
+<td>332</td>
+<td>924</td>
+<td>2 6 4 3 1 5</td>
+</tr>
+<tr>
+<td>443</td>
+<td>168</td>
+<td>1 5 2 3 6 4 (走了两趟)</td>
+</tr>
+<tr>
+<td>168</td>
+<td>477</td>
+<td>1 5 2 3 6 4</td>
+</tr>
+<tr>
+<td>924</td>
+<td>168</td>
+<td>4 5 3 1 6 2 (走了两趟)</td>
+</tr>
+<tr>
+<td>168</td>
+<td>691</td>
+<td>4 5 3 1 6 2</td>
+</tr>
+</tbody></table>
+<p>发现一个规律, 几个数串联在一起的感觉</p>
+<p>结合这段, 比完一趟<code>*$rbx &gt; $eax</code>, <code>$rbx+8</code>了, 跳到后一个 node</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">4011ee:	48 8b 5b 08          	mov    0x8(%rbx),%rbx</span><br><span class="line">4011f2:	83 ed 01             	sub    $0x1,%ebp</span><br><span class="line">4011f5:	75 e8                	jne    4011df &lt;phase_6+0xeb&gt;</span><br></pre></td></tr></table></figure>
+
+<p>又得到一个 kv 表</p>
+<table>
+<thead>
+<tr>
+<th>k</th>
+<th>v</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>443</td>
+</tr>
+<tr>
+<td>2</td>
+<td>477</td>
+</tr>
+<tr>
+<td>3</td>
+<td>691</td>
+</tr>
+<tr>
+<td>4</td>
+<td>924</td>
+</tr>
+<tr>
+<td>5</td>
+<td>168</td>
+</tr>
+<tr>
+<td>6</td>
+<td>332</td>
+</tr>
+</tbody></table>
+<p>要让 v 从大往小排</p>
+<p>输入<code>4 3 2 1 6 5</code>过了</p>
+<h3 id="secret-phase"><a href="#secret-phase" class="headerlink" title="secret_phase"></a>secret_phase</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// phase_defused</span><br><span class="line">4015f0:	be 19 26 40 00       	mov    $0x402619,%esi</span><br><span class="line">4015f5:	bf 70 38 60 00       	mov    $0x603870,%edi</span><br><span class="line">4015fa:	e8 f1 f5 ff ff       	call   400bf0 &lt;__isoc99_sscanf@plt&gt;</span><br><span class="line">4015ff:	83 f8 03             	cmp    $0x3,%eax</span><br></pre></td></tr></table></figure>
+
+<p>读取三个参数, 在第四关加第三个参数进去(进入秘密关的钥匙)</p>
+<p><img src="/../images/bomblab/image-14.png" alt="alt text"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">401604:	be 22 26 40 00       	mov    $0x402622,%esi</span><br><span class="line">401609:	48 8d 7c 24 10       	lea    0x10(%rsp),%rdi</span><br><span class="line">40160e:	e8 25 fd ff ff       	call   401338 &lt;strings_not_equal&gt;</span><br></pre></td></tr></table></figure>
+
+<p>发现第三个参数要传<code>DrEvil</code></p>
+<p><img src="/../images/bomblab/image-23.png" alt="alt text"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">40125d:	8d 40 ff             	lea    -0x1(%rax),%eax</span><br><span class="line">401260:	3d e8 03 00 00       	cmp    $0x3e8,%eax</span><br><span class="line">401265:	76 05                	jbe    40126c &lt;secret_phase+0x2a&gt;</span><br><span class="line">401267:	e8 ce 01 00 00       	call   40143a &lt;explode_bomb&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 无符号比较,大于1000炸</span></span><br><span class="line"><span class="comment">// 1..1001</span></span><br><span class="line"><span class="keyword">if</span>(--*($eax)&gt;<span class="number">1000</span>)&#123;</span><br><span class="line">   explode_bomb();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">401273:	e8 8c ff ff ff       	call   401204 &lt;fun7&gt;</span><br><span class="line">401278:	83 f8 02             	cmp    $0x2,%eax</span><br><span class="line">40127b:	74 05                	je     401282 &lt;secret_phase+0x40&gt;</span><br><span class="line">40127d:	e8 b8 01 00 00       	call   40143a &lt;explode_bomb&gt;</span><br></pre></td></tr></table></figure>
+
+<p>大致翻译成 c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(fun7(<span class="number">6303984</span>, input)!=<span class="number">2</span>)&#123;</span><br><span class="line">   explode_bomb();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>好奇汇编里面的<code>$edx = *rdi</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">40120d:	8b 17                	mov    (%rdi),%edx</span><br><span class="line">40120f:	39 f2                	cmp    %esi,%edx</span><br><span class="line">401211:	7e 0d                	jle    401220 &lt;fun7+0x1c&gt;</span><br><span class="line">401213:	48 8b 7f 08          	mov    0x8(%rdi),%rdi</span><br><span class="line">401217:	e8 e8 ff ff ff       	call   401204 &lt;fun7&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/bomblab/image-16.png" alt="alt text"></p>
+<p><img src="/../images/bomblab/image-15.png" alt="alt text"></p>
+<p>fun7 大致翻译成 c, 发现和 func4 的差不多, 也是二叉搜索树</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">fun7</span><span class="params">(x, input)</span>&#123;</span><br><span class="line">   <span class="keyword">if</span>(x==null)&#123;</span><br><span class="line">      ans = <span class="number">-1</span>;</span><br><span class="line">      <span class="keyword">return</span> ans;</span><br><span class="line">   &#125;</span><br><span class="line">   edx = *x; <span class="comment">// 初始36 结构体的第一个字段</span></span><br><span class="line">   <span class="keyword">if</span>(edx&gt;input)&#123;</span><br><span class="line">      x = (x+<span class="number">8</span>); <span class="comment">// 准确说 x-&gt;left 结构体的第二个字段</span></span><br><span class="line">      ans = fun7(x, input);</span><br><span class="line">      <span class="keyword">return</span> <span class="number">2</span>*ans;</span><br><span class="line">   &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(edx==input)&#123;</span><br><span class="line">         ans = <span class="number">0</span>;</span><br><span class="line">         <span class="keyword">return</span> ans;</span><br><span class="line">      &#125; <span class="keyword">else</span>&#123; <span class="comment">// edx&lt;input</span></span><br><span class="line">         x = (x+<span class="number">16</span>); <span class="comment">// 准确说 x-&gt;right 结构体的第三个字段</span></span><br><span class="line">         ans = fun7(x, input);</span><br><span class="line">         <span class="keyword">return</span> <span class="number">2</span>*ans+<span class="number">1</span>;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/bomblab/image-18.png" alt="alt text"></p>
+<p>这样一个树的结构</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span>&#123;</span></span><br><span class="line">   <span class="type">int</span> val;</span><br><span class="line">   TreeNode* left;</span><br><span class="line">   TreeNode* right;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/bomblab/image-17.png" alt="alt text"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(fun7(x,input)!=<span class="number">2</span>)&#123;</span><br><span class="line">   explode_bomb();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>需要 ans&#x3D;2,就通过了</p>
+<p>即路径要为 0b01(先左再右)或者 0b010(先左再右再左也行)</p>
+<p>随便试了个 20(实际就是 0b010 这个路径),过了</p>
+<h1 id="成果"><a href="#成果" class="headerlink" title="成果"></a>成果</h1><p><img src="/../images/bomblab/image-24.png" alt="alt text"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>做 bomblab 真的很有意思, 上下花了 5 天左右做完的, 花了半天整理笔记, 做下来又学会了更多的 gdb 高级用法, 在调试中发现代码运行的秘密, 有时不用完整把汇编翻译成 c, 只要摸清运行逻辑, 数据放在哪个寄存器也能成功拆弹 🤗(待提高: 有些地址的计算不是很熟练用命令去查看值, 分析数据结构)</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://zccccc01.github.io">ZCCCCC01</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://zccccc01.github.io/2025/04/23/CSAPP-bomblab%E6%80%BB%E7%BB%93/">https://zccccc01.github.io/2025/04/23/CSAPP-bomblab%E6%80%BB%E7%BB%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/04/12/CSAPP-datalab%E6%80%BB%E7%BB%93/" title="CSAPP-datalab总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">CSAPP-datalab总结</div></div><div class="info-2"><div class="info-item-1">做 datalab 的心路历程总结1. bitXor 函数只用 ~ 和 &amp; 实现x ^ y实现异或，我的思路是:    x y x^y    101 100 001   1 1 0   0 0 0   1 0 1    &amp;后为 1，那么两个数该位都是 1 我需要找&amp;后为 0，并且该位只有一个 0(todo) &amp;后为 0，并且两个数该位都是 0   所以 a &amp; b = c 位为 1 的就找到上面的 1. ~a &amp; ~b = d 位为 1 的就找到上面的 3. ~c &amp; ~d推出上面的 2.  2. tmin 函数返回补码表示的最小整数  直接最高位为 1, 其余全 0 即可 也就是-2^31 + ...最小, 所以…全取 0  3. isTmax 函数返回是否为补码表示的最大整数  x 如果是 Tmax,有~(x+1) ^ x这个是 0,再取个! but x = -1,这个也满足,需要特判,加上&amp; !!(x+1)  4. allOddBits 函数若奇数位上全为 1 返回 1,否则 0 原始思路每 8...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">ZCCCCC01</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zccccc01"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">繁华如三千东流水,我只取一瓢爱了解</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%81%9A-bomblab-%E7%9A%84%E5%BF%83%E8%B7%AF%E5%8E%86%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">做 bomblab 的心路历程总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.</span> <span class="toc-text">工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-gdbinit-%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">配置.gdbinit 文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%AF%84%E5%AD%98%E5%99%A8%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">常见寄存器知识总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#let%E2%80%99s-go"><span class="toc-number">1.4.</span> <span class="toc-text">let’s go</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#phase-1"><span class="toc-number">1.4.1.</span> <span class="toc-text">phase_1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phase-2"><span class="toc-number">1.4.2.</span> <span class="toc-text">phase_2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phase-3"><span class="toc-number">1.4.3.</span> <span class="toc-text">phase_3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phase-4"><span class="toc-number">1.4.4.</span> <span class="toc-text">phase_4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#func4"><span class="toc-number">1.4.5.</span> <span class="toc-text">func4()</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GPT-%E7%BB%99%E7%9A%84%E4%B8%80%E4%B8%AA%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.4.5.1.</span> <span class="toc-text">GPT 给的一个介绍</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phase-5"><span class="toc-number">1.4.6.</span> <span class="toc-text">phase_5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phase-6"><span class="toc-number">1.4.7.</span> <span class="toc-text">phase_6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#secret-phase"><span class="toc-number">1.4.8.</span> <span class="toc-text">secret_phase</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%90%E6%9E%9C"><span class="toc-number">2.</span> <span class="toc-text">成果</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/23/CSAPP-bomblab%E6%80%BB%E7%BB%93/" title="CSAPP-bomblab总结">CSAPP-bomblab总结</a><time datetime="2025-04-23T08:29:49.000Z" title="Created 2025-04-23 16:29:49">2025-04-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/12/CSAPP-datalab%E6%80%BB%E7%BB%93/" title="CSAPP-datalab总结">CSAPP-datalab总结</a><time datetime="2025-04-12T13:40:47.000Z" title="Created 2025-04-12 21:40:47">2025-04-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/29/linux%E9%85%8D%E7%BD%AEnotebook/" title="linux配置notebook">linux配置notebook</a><time datetime="2025-03-29T12:22:00.000Z" title="Created 2025-03-29 20:22:00">2025-03-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/28/hexo%E6%B8%B2%E6%9F%93%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/" title="hexo渲染数学公式">hexo渲染数学公式</a><time datetime="2025-03-28T06:11:59.000Z" title="Created 2025-03-28 14:11:59">2025-03-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/16/windows-%E4%BD%BF%E7%94%A8-cmake/" title="windows 使用 cmake">windows 使用 cmake</a><time datetime="2025-03-16T09:45:56.000Z" title="Created 2025-03-16 17:45:56">2025-03-16</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By ZCCCCC01</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
